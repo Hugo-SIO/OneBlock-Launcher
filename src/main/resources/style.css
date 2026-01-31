@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #0f0f0f);
+    -fx-background-image: url("background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+#title {
+    -fx-font-size: 36px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, black, 10, 0.5, 0, 0);
+}
+
+.button {
+    -fx-background-color: #3aa63a;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 12 30;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, black, 5, 0.3, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: #4ec94e;
+}
+
+.button:pressed {
+    -fx-background-color: #2d7f2d;
+}
