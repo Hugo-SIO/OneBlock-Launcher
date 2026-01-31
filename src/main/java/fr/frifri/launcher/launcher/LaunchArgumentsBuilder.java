@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LaunchArgumentsBuilder {
 
-    public static List<String> buildLaunchCommand(File gameDir, String version) {
+    public static List<String> buildLaunchCommand(File gameDir, String version, String username) {
 
         List<String> command = new ArrayList<>();
 
@@ -39,6 +39,9 @@ public class LaunchArgumentsBuilder {
 
         command.add("--version");
         command.add(version);
+
+        command.add("--username");
+        command.add(username);
 
         return command;
     }

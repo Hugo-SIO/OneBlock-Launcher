@@ -33,9 +33,9 @@ public class MinecraftLauncher {
         System.out.println("Préparation terminée !");
     }
 
-    public static void launchGame() {
+    public static void launchGame(String username) {
         File gameDir = new File(System.getProperty("user.home") + "/AppData/Roaming/.oneblock");
-        List<String> command = LaunchArgumentsBuilder.buildLaunchCommand(gameDir, VERSION);
+        List<String> command = LaunchArgumentsBuilder.buildLaunchCommand(gameDir, VERSION, username);
         GameLauncher.launchGame(command);
     }
 }
