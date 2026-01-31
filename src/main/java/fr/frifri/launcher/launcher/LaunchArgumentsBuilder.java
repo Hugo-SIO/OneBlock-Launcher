@@ -10,7 +10,7 @@ public class LaunchArgumentsBuilder {
 
         List<String> command = new ArrayList<>();
 
-        command.add("C:\\Program Files\\Java\\jdk-21.0.10\\bin\\java.exe");
+        command.add("java");
         command.add("-Xmx2G");
         command.add("-Xms1G");
 

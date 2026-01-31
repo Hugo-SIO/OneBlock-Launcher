@@ -29,7 +29,7 @@ public class FabricInstaller {
             // 2) Exécuter l’installer
             System.out.println("Installation de Fabric...");
             ProcessBuilder pb = new ProcessBuilder(
-                    "C:\\Program Files\\Java\\jdk-21.0.10\\bin\\java.exe", "-jar",
+                    "java", "-jar",
                     installer.getAbsolutePath(),
                     "client",
                     "-dir", gameDir.getAbsolutePath(),

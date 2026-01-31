@@ -1,16 +1,17 @@
-[14:35:10] [main/INFO]: Loading Minecraft 1.21.4 with Fabric Loader 0.18.4
-[14:35:10] [main/INFO]: Loading 4 mods:
+[15:51:01] [main/INFO]: Loading Minecraft 1.21.4 with Fabric Loader 0.18.4
+[15:51:01] [main/INFO]: Fabric is preparing JARs on first launch, this may take a few seconds...
+[15:51:01] [main/INFO]: Loading 4 mods:
 	- fabricloader 0.18.4
 	   \-- mixinextras 0.5.0
 	- java 21
 	- minecraft 1.21.4
-[14:35:10] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/Hugo/AppData/Roaming/.oneblock/libraries/net/fabricmc/sponge-mixin/0.17.0+mixin.0.8.7/sponge-mixin-0.17.0+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
-[14:35:11] [Datafixer Bootstrap/INFO]: 243 Datafixer optimizations took 336 milliseconds
-[14:35:15] [main/INFO]: Completely ignored arguments: [--launchTarget, client]
-[14:35:16] [Render thread/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
-[14:35:16] [Render thread/INFO]: Setting user: Player503
-[14:35:16] [Render thread/INFO]: Backend library: LWJGL version 3.3.3-snapshot
-[14:35:16] [Render thread/ERROR]: Couldn't set icon
+[15:51:01] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/Hugo/AppData/Roaming/.oneblock/libraries/net/fabricmc/sponge-mixin/0.17.0+mixin.0.8.7/sponge-mixin-0.17.0+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
+[15:51:02] [Datafixer Bootstrap/INFO]: 243 Datafixer optimizations took 341 milliseconds
+[15:51:06] [main/INFO]: Completely ignored arguments: [--launchTarget, client]
+[15:51:06] [Render thread/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[15:51:06] [Render thread/INFO]: Setting user: Player740
+[15:51:07] [Render thread/INFO]: Backend library: LWJGL version 3.3.3-snapshot
+[15:51:07] [Render thread/ERROR]: Couldn't set icon
 java.io.FileNotFoundException: icons/icon_16x16.png
 	at knot/net.minecraft.class_8518.method_51419(class_8518.java:41) ~[client-intermediary.jar:?]
 	at knot/net.minecraft.class_8518.method_51418(class_8518.java:25) ~[client-intermediary.jar:?]
@@ -20,5 +21,5 @@ java.io.FileNotFoundException: icons/icon_16x16.png
 	at net.fabricmc.loader.impl.game.minecraft.MinecraftGameProvider.launch(MinecraftGameProvider.java:514) [fabric-loader-0.18.4.jar:?]
 	at net.fabricmc.loader.impl.launch.knot.Knot.launch(Knot.java:72) [fabric-loader-0.18.4.jar:?]
 	at net.fabricmc.loader.impl.launch.knot.KnotClient.main(KnotClient.java:23) [fabric-loader-0.18.4.jar:?]
-[14:35:17] [Render thread/INFO]: Reloading ResourceManager: vanilla
-[14:35:18] [Render thread/INFO]: Stopping!
+[15:51:07] [Render thread/INFO]: Reloading ResourceManager: vanilla
+[15:51:09] [Render thread/INFO]: Stopping!
