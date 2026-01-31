@@ -1,9 +1,12 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     java
     application
     id("org.javamodularity.moduleplugin") version "1.8.15"
     id("org.openjfx.javafxplugin") version "0.0.13"
     id("org.beryx.jlink") version "2.25.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "fr.frifri"
@@ -50,4 +53,16 @@ jlink {
     launcher {
         name = "app"
     }
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "fr.frifri.launcher.Main"
+    }
+}
+
+tasks.named<ShadowJar>("shadowJar") {
+    archiveBaseName.set("OneBlockLauncher")
+    archiveVersion.set("")
+    archiveClassifier.set("")
 }
