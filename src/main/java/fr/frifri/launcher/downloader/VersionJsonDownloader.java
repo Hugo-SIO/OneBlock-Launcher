@@ -1,5 +1,9 @@
 package fr.frifri.launcher.downloader;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.frifri.launcher.utils.Http;
 
 import java.io.File;
@@ -9,42 +13,41 @@ import java.util.regex.Pattern;
 
 public class VersionJsonDownloader {
 
-    public static File downloadVersionJson(File gameDir) {
+    public static File downloadVersionJson(File gameDir, String version) {
         try {
-            File jsonFile = new File(gameDir, "1.21.4.json");
+            File manifest = VersionManifestDownloader.downloadManifest(gameDir);
+            String json = Files.readString(manifest.toPath());
+            JsonObject root = JsonParser.parseString(json).getAsJsonObject();
 
-            if (jsonFile.exists()) {
-                System.out.println("Version JSON déjà présent !");
-                return jsonFile;
+            JsonArray versions = root.getAsJsonArray("versions");
+            String versionUrl = null;
+
+            for (JsonElement el : versions) {
+                JsonObject obj = el.getAsJsonObject();
+                if (obj.get("id").getAsString().equals(version)) {
+                    versionUrl = obj.get("url").getAsString();
+                    break;
+                }
             }
 
-            // 1) Télécharger le manifest officiel
-            String manifestUrl = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
-            File manifestFile = new File(gameDir, "version_manifest.json");
-            Http.download(manifestUrl, manifestFile);
+            if (versionUrl == null)
+                throw new RuntimeException("Version introuvable dans le manifest");
 
-            String manifest = Files.readString(manifestFile.toPath());
+            File versionDir = new File(gameDir, "versions/" + version);
+            versionDir.mkdirs();
 
-            // 2) Trouver l’URL de la version 1.21.4
-            Pattern p = Pattern.compile("\"id\"\\s*:\\s*\"1.21.4\"[^{]*\"url\"\\s*:\\s*\"([^\"]+)\"");
-            Matcher m = p.matcher(manifest);
+            File versionJson = new File(versionDir, version + ".json");
 
-            if (!m.find()) {
-                throw new RuntimeException("Impossible de trouver l’URL du JSON 1.21.4 dans le manifest !");
+            if (!versionJson.exists()) {
+                System.out.println("Téléchargement du version.json...");
+                Http.download(versionUrl, versionJson);
             }
 
-            String versionUrl = m.group(1);
-
-            // 3) Télécharger le JSON de version
-            Http.download(versionUrl, jsonFile);
-
-            System.out.println("Version JSON téléchargée !");
-            return jsonFile;
+            return versionJson;
 
         } catch (Exception e) {
-            throw new RuntimeException("Impossible de télécharger la version : " + e.getMessage());
+            throw new RuntimeException("Erreur version.json : " + e.getMessage());
         }
     }
-
-
 }
+

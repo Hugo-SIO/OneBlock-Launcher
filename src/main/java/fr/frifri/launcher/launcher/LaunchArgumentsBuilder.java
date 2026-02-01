@@ -44,6 +44,9 @@ public class LaunchArgumentsBuilder {
         command.add("--assetsDir");
         command.add(new File(gameDir, "assets").getAbsolutePath());
 
+        command.add("--assetIndex");
+        command.add("19"); // ID de ton index
+
         command.add("--version");
         command.add(version);
 

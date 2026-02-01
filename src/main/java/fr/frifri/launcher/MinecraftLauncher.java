@@ -21,7 +21,8 @@ public class MinecraftLauncher {
 
         LauncherProfileCreator.ensureLauncherProfile(gameDir);
 
-        File vanillaJson = VersionJsonDownloader.downloadVersionJson(gameDir);
+        File vanillaJson = VersionJsonDownloader.downloadVersionJson(gameDir, VERSION);
+
 
         AssetDownloader.downloadAssets(gameDir, vanillaJson);
         LibraryDownloader.downloadLibraries(gameDir, vanillaJson);
@@ -38,6 +39,12 @@ public class MinecraftLauncher {
     public static void launchGame(MinecraftSession session, boolean offline) {
         File gameDir = new File(System.getProperty("user.home") + "/AppData/Roaming/.oneblock");
 
+        // Vérifier si tout est prêt
+        if (!isGameReady(gameDir)) {
+            System.out.println("Fichiers manquants détectés. Préparation du jeu...");
+            prepare();
+        }
+
         // Installer les mods AVANT de lancer le jeu
         ModInstaller.installDefaultMods();
 
@@ -46,6 +53,36 @@ public class MinecraftLauncher {
 
         // Lancer le jeu
         GameLauncher.launchGame(command);
+    }
+
+
+    private static boolean isGameReady(File gameDir) {
+        File versionJson = new File(gameDir, "versions/" + VERSION + "/" + VERSION + ".json");
+        File clientJar = new File(gameDir, "versions/" + VERSION + "/" + VERSION + ".jar");
+        File librariesDir = new File(gameDir, "libraries");
+        File assetsDir = new File(gameDir, "assets");
+        File nativesDir = new File(gameDir, "natives");
+
+        // Vérifier version.json
+        if (!versionJson.exists()) return false;
+
+        // Vérifier client.jar
+        if (!clientJar.exists()) return false;
+
+        // Vérifier libraries
+        if (!librariesDir.exists() || librariesDir.listFiles().length == 0) return false;
+
+        // Vérifier assets
+        if (!assetsDir.exists() || assetsDir.listFiles().length == 0) return false;
+
+        // Vérifier natives
+        if (!nativesDir.exists() || nativesDir.listFiles().length == 0) return false;
+
+        // Vérifier Fabric Loader
+        File fabricLoader = new File(gameDir, "libraries/net/fabricmc/fabric-loader/0.18.4");
+        if (!fabricLoader.exists()) return false;
+
+        return true;
     }
 
 

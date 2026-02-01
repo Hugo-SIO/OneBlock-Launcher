@@ -1,48 +1,65 @@
 package fr.frifri.launcher.downloader;
 
+import fr.frifri.launcher.utils.Http;
 import fr.frifri.launcher.utils.FileUtils;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Files;
 
 public class FabricInstaller {
 
+    private static final String MC_VERSION = "1.21.4";
+    private static final String LOADER_VERSION = "0.18.4";
+
     public static void installFabric(File gameDir) {
         try {
-            FileUtils.ensureFolder(gameDir);
+            File librariesDir = new File(gameDir, "libraries");
+            FileUtils.ensureFolder(librariesDir);
 
-            File installer = new File(gameDir, "fabric-installer.jar");
+            // 1) Télécharger le profile JSON Fabric depuis l’API officielle
+            String metaUrl = "https://meta.fabricmc.net/v2/versions/loader/"
+                    + MC_VERSION + "/" + LOADER_VERSION + "/profile/json";
 
-            // 1) Copier le fabric-installer.jar depuis resources
-            if (!installer.exists()) {
-                System.out.println("Copie du Fabric Installer local...");
+            System.out.println("Téléchargement du profile Fabric...");
+            File profileJson = new File(gameDir, "fabric-profile.json");
+            Http.download(metaUrl, profileJson);
 
-                try (InputStream in = FabricInstaller.class.getResourceAsStream("/fabric-installer.jar")) {
-                    if (in == null) {
-                        throw new RuntimeException("fabric-installer.jar introuvable dans resources !");
-                    }
-                    Files.copy(in, installer.toPath());
+            // 2) Lire le JSON
+            String json = Files.readString(profileJson.toPath());
+            JsonObject root = JsonParser.parseString(json).getAsJsonObject();
+
+            // 3) Télécharger toutes les libraries Fabric
+            System.out.println("Téléchargement des libraries Fabric...");
+
+            for (var libElement : root.getAsJsonArray("libraries")) {
+                JsonObject lib = libElement.getAsJsonObject();
+                String name = lib.get("name").getAsString();
+                String url = lib.get("url").getAsString();
+
+                // Convertir "group:artifact:version" en chemin
+                String[] parts = name.split(":");
+                String group = parts[0].replace(".", "/");
+                String artifact = parts[1];
+                String version = parts[2];
+
+                String fileName = artifact + "-" + version + ".jar";
+                String path = group + "/" + artifact + "/" + version + "/" + fileName;
+
+                File outFile = new File(librariesDir, path);
+                outFile.getParentFile().mkdirs();
+
+                if (!outFile.exists()) {
+                    System.out.println("Téléchargement : " + fileName);
+                    Http.download(url + path, outFile);
                 }
             }
 
-            // 2) Exécuter l’installer
-            System.out.println("Installation de Fabric...");
-            ProcessBuilder pb = new ProcessBuilder(
-                    "java", "-jar",
-                    installer.getAbsolutePath(),
-                    "client",
-                    "-dir", gameDir.getAbsolutePath(),
-                    "-mcversion", "1.21.4",
-                    "-loader", "0.18.4"
-            );
+            System.out.println("Fabric installé avec succès !");
 
-            pb.inheritIO();
-            Process p = pb.start();
-            p.waitFor();
-
-            System.out.println("Fabric installé !");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Erreur Fabric : " + e.getMessage());
         }
     }
