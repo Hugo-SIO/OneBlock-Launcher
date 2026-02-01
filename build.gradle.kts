@@ -29,8 +29,8 @@ tasks.withType<JavaCompile> {
 }
 
 application {
-    mainModule.set("fr.frifri.launcher_oneblock")
-    mainClass.set("fr.frifri.launcher_oneblock.HelloApplication")
+    mainModule.set("fr.frifri.launcher")
+    mainClass.set("fr.frifri.launcher.Main")
 }
 
 javafx {
@@ -41,6 +41,8 @@ javafx {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation("org.json:json:20231013")
+
 }
 
 tasks.withType<Test> {

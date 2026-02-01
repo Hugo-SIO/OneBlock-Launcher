@@ -1,12 +1,14 @@
 package fr.frifri.launcher.launcher;
 
+import fr.frifri.launcher.auth.MinecraftSession;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LaunchArgumentsBuilder {
 
-    public static List<String> buildLaunchCommand(File gameDir, String version, String username) {
+    public static List<String> buildLaunchCommand(File gameDir, String version, MinecraftSession session, boolean offline) {
 
         List<String> command = new ArrayList<>();
 
@@ -18,7 +20,6 @@ public class LaunchArgumentsBuilder {
         command.add("-Djava.library.path=" + nativesDir.getAbsolutePath());
 
         StringBuilder classpath = new StringBuilder();
-
         addAllJars(new File(gameDir, "libraries"), classpath);
         addAllJars(new File(gameDir, "versions/" + version), classpath);
         addAllJars(new File(gameDir, "versions/1.21.4-fabric"), classpath);
@@ -28,8 +29,14 @@ public class LaunchArgumentsBuilder {
 
         command.add("net.fabricmc.loader.impl.launch.knot.KnotClient");
 
-        command.add("--launchTarget");
-        command.add("client");
+        command.add("--username");
+        command.add(session.username);
+
+        command.add("--uuid");
+        command.add(session.uuid);
+
+        command.add("--accessToken");
+        command.add(session.accessToken);
 
         command.add("--gameDir");
         command.add(gameDir.getAbsolutePath());
@@ -40,11 +47,9 @@ public class LaunchArgumentsBuilder {
         command.add("--version");
         command.add(version);
 
-        command.add("--username");
-        command.add(username);
-
         return command;
     }
+
 
     private static void addAllJars(File folder, StringBuilder classpath) {
         if (!folder.exists()) return;

@@ -1,8 +1,10 @@
 package fr.frifri.launcher;
 
+import fr.frifri.launcher.auth.MinecraftSession;
 import fr.frifri.launcher.downloader.*;
 import fr.frifri.launcher.launcher.GameLauncher;
 import fr.frifri.launcher.launcher.LaunchArgumentsBuilder;
+import fr.frifri.launcher.mods.ModInstaller;
 import fr.frifri.launcher.utils.LauncherProfileCreator;
 import fr.frifri.launcher.utils.NativeExtractor;
 
@@ -33,9 +35,18 @@ public class MinecraftLauncher {
         System.out.println("Préparation terminée !");
     }
 
-    public static void launchGame(String username) {
+    public static void launchGame(MinecraftSession session, boolean offline) {
         File gameDir = new File(System.getProperty("user.home") + "/AppData/Roaming/.oneblock");
-        List<String> command = LaunchArgumentsBuilder.buildLaunchCommand(gameDir, VERSION, username);
+
+        // Installer les mods AVANT de lancer le jeu
+        ModInstaller.installDefaultMods();
+
+        // Construire la commande de lancement
+        List<String> command = LaunchArgumentsBuilder.buildLaunchCommand(gameDir, VERSION, session, offline);
+
+        // Lancer le jeu
         GameLauncher.launchGame(command);
     }
+
+
 }
